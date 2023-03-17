@@ -1,11 +1,22 @@
 package org.lessons.java;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
+
+        Concerto newConcerto;
+        try {
+            newConcerto = new Concerto("Bob Dylan", LocalDate.parse("2030-12-05"), 200, LocalTime.parse("21:00"), BigDecimal.valueOf(45.50));
+            System.out.println(newConcerto);
+        } catch (Exception e) {
+            System.out.println("Non è possibile inserire l'evento! " + e.getMessage());
+        }
+
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Inserisce il nome dell'evento: ");

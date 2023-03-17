@@ -2,7 +2,6 @@ package org.lessons.java;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class Evento {
     //Creare una classe Evento che abbia le seguenti proprietà:
@@ -71,6 +70,7 @@ public class Evento {
             throw new PostiException("Posti in negativo");
 
         } else {
+            numeroPostiTotale--;
             numeroPostiPrenotati++;
         }
     }
@@ -86,6 +86,7 @@ public class Evento {
         } else if (numeroPostiTotale < 0){
             throw new PostiException("Posti in negativo!");
         } else {
+            numeroPostiTotale++;
             numeroPostiPrenotati--;
         }
     }
@@ -93,10 +94,13 @@ public class Evento {
     3. l’override del metodo toString() in modo che venga restituita una stringa
         contenente: data formattata - titolo
      */
-    DateTimeFormatter dataFormattata = DateTimeFormatter.ofPattern("dd/MM/yyyy").withLocale(Locale.ITALIAN);
+    public String dataFoormattata(LocalDate data){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return data.format(formatter);
+    }
 
     @Override
     public String toString() {
-        return "Data del evento: " + data.format(dataFormattata) + " Titolo: " + titolo;
+        return this.dataFoormattata(getData()) + " Evento: " + getTitolo();
     }
 }
