@@ -13,15 +13,22 @@ public class Evento {
 
     //Quando si istanzia un nuovo evento questi attributi devono essere tutti valorizzati nel
     //costruttore, tranne posti prenotati che va inizializzato a 0
-    public Evento(String titolo, LocalDate data, int numeroPostiTotale) throws Exception {
+    public Evento(String titolo, LocalDate data, int numeroPostiTotale) throws DataException, PostiException {
+        this.titolo = titolo;
 
+        LocalDate oggi = LocalDate.now();
+        if(data.isBefore(oggi)){
+            throw new DataException("La data inserita non è validain in quanto è già passata!");
+        } else {
+            this.data = data;
+        }
 
         if(numeroPostiTotale <= 0) {
-            throw new Exception("Il numero di posti totali deve essere maggiore di 0 !");
+            throw new PostiException("Il numero di posti totali deve essere maggiore di 0 !");
+        } else{
+            this.numeroPostiTotale = numeroPostiTotale;
         }
-        this.titolo = titolo;
-        this.data = data;
-        this.numeroPostiTotale = numeroPostiTotale;
+
         this.numeroPostiPrenotati = 0;
     }
 
@@ -38,10 +45,7 @@ public class Evento {
         return data;
     }
 
-    public void setData(LocalDate data) throws Exception {
-        if(LocalDate.now().isAfter(data)) {
-            throw new Exception("La data inserita è gia passata");
-        }
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
@@ -58,23 +62,32 @@ public class Evento {
     1. prenota: aggiunge uno ai posti prenotati. Se l’evento è già passato o non ha posti
        disponibili deve sollevare un’eccezione.
 	 */
-    public void prenota() throws Exception {
-        if(data.isBefore(LocalDate.now()) || (numeroPostiPrenotati == numeroPostiTotale)) {
-            throw new Exception("Non puoi prenotare per questo evento!");
-        }
-        numeroPostiPrenotati++;
+    public void prenota() throws DataException, PostiException{
+        LocalDate oggi = LocalDate.now();
 
+        if(data.isBefore(oggi)) {
+            throw new DataException("Non puoi prenotare per questo evento!");
+        } else if (numeroPostiTotale < 1) {
+            throw new PostiException("Posti in negativo");
+
+        } else {
+            numeroPostiPrenotati++;
+        }
     }
     /*
     2. disdici: riduce di uno i posti prenotati. Se l’evento è già passato o non ci sono
         prenotazioni deve sollevare un’eccezione.
      */
-    public void disdici() throws Exception {
-        LocalDate pastEvent = LocalDate.now();
-        if(data.isBefore(pastEvent) || (numeroPostiPrenotati == 0)) {
-            throw new Exception("Non è possibile disdire per questo evento!");
+    public void disdici() throws DataException, PostiException {
+        LocalDate oggi = LocalDate.now();
+
+        if(data.isBefore(oggi)) {
+            throw new DataException("Non puoi prenotare per questo evento!");
+        } else if (numeroPostiTotale < 0){
+            throw new PostiException("Posti in negativo!");
+        } else {
+            numeroPostiPrenotati--;
         }
-        numeroPostiPrenotati--;
     }
     /*
     3. l’override del metodo toString() in modo che venga restituita una stringa
