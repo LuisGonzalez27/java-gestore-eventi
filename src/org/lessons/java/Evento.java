@@ -6,21 +6,21 @@ import java.util.Locale;
 
 public class Evento {
     //Creare una classe Evento che abbia le seguenti proprietà:
-    String titolo;
-    LocalDate data;
-    int numeroPostiTotale;
-    int numeroPostiPrenotati;
+    private String titolo;
+    private LocalDate data;
+    private int numeroPostiTotale;
+    private int numeroPostiPrenotati;
 
     //Quando si istanzia un nuovo evento questi attributi devono essere tutti valorizzati nel
     //costruttore, tranne posti prenotati che va inizializzato a 0
     public Evento(String titolo, LocalDate data, int numeroPostiTotale) throws Exception {
-        this.titolo = titolo;
-        this.data = data;
-        this.numeroPostiTotale = numeroPostiTotale;
+
 
         if(numeroPostiTotale <= 0) {
             throw new Exception("Il numero di posti totali deve essere maggiore di 0 !");
         }
+        this.titolo = titolo;
+        this.data = data;
         this.numeroPostiTotale = numeroPostiTotale;
         this.numeroPostiPrenotati = 0;
     }
@@ -39,9 +39,7 @@ public class Evento {
     }
 
     public void setData(LocalDate data) throws Exception {
-        //controllo che la data non sia già passata
-        LocalDate pastDate = LocalDate.now();
-        if(data.isBefore(pastDate)) {
+        if(LocalDate.now().isAfter(data)) {
             throw new Exception("La data inserita è gia passata");
         }
         this.data = data;
